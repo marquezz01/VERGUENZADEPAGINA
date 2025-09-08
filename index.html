@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caos → Formal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Pantalla de Caos */
+        #chaos-screen {
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e6e9ef;
+        }
+        
+        .chaos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e6e9ef;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: #4a6cf7;
+        }
+        
+        .fake-btn {
+            background: #f8f9fa;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: 12px;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .fake-btn:hover {
+            background: #edf2f7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .captcha-container {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            position: relative;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .captcha-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #2d3748;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .captcha-title i {
+            color: #4a6cf7;
+        }
+        
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        #captcha-input {
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #2d3748;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        }
+        
+        #captcha-input:focus {
+            outline: none;
+            border-color: #4a6cf7;
+            box-shadow: 0 0 0 4px rgba(74, 108, 247, 0.1);
+        }
+        
+        #captcha-validate {
+            padding: 16px 28px;
+            background: #4a6cf7;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
+        }
+        
+        #captcha-validate:hover {
+            background: #3b5be3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 108, 247, 0.35);
+        }
+        
+        .captcha-hint {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        #captcha-hint {
+            padding: 12px 20px;
+            background: #fff;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        #captcha-hint:hover {
+            background: #f7fafc;
+            border-color: #cbd5e0;
+        }
+        
+        #captcha-msg {
+            margin-top: 20px;
+            color: #718096;
+            font-style: italic;
+            min-height: 24px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #4a6cf7;
+        }
+        
+        .chaos-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+        
+        .fake-action {
+            padding: 16px 28px;
+            background: #f8f9fa;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .fake-action:hover {
+            background: #edf2f7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .meme-container {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .meme-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        
+        #meme1 {
+            max-width: 100%;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        #meme1:hover {
+            transform: scale(1.02);
+        }
+        
+        #thief {
+            position: absolute;
+            display: none;
+            width: 60px;
+            height: 60px;
+            background: #4a6cf7;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.5s;
+            box-shadow: 0 5px 20px rgba(74, 108, 247, 0.5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        /* Pantalla de Presentación */
+        #presentation-screen {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e6e9ef;
+        }
+        
+        .presentation-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e6e9ef;
+        }
+        
+        .presentation-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .slide-container {
+            width: 100%;
+            position: relative;
+            margin-bottom: 30px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .slide {
+            display: none;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .slide img {
+            max-width: 100%;
+            display: block;
+        }
+        
+        .logo-small {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px !important;
+            height: auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .presentation-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            padding: 14px 28px;
+            background: #f8f9fa;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background: #edf2f7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+            max-width: 50%;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #edf2f7;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        #fill {
+            height: 100%;
+            background: #4a6cf7;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .slide-counter {
+            font-weight: 600;
+            color: #4a5568;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        #exit {
+            background: #f8f9fa;
+            color: #e53e3e;
+            border-color: #fed7d7;
+        }
+        
+        #exit:hover {
+            background: #fed7d7;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chaos-header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            
+            .header-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .fake-btn {
+                margin-left: 0;
+            }
+            
+            .chaos-actions {
+                flex-direction: column;
+            }
+            
+            .captcha-box {
+                flex-direction: column;
+            }
+            
+            #captcha-validate {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .presentation-controls {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .progress-container {
+                max-width: 100%;
+                order: 3;
+            }
+        }
+        
+        /* Efectos de transición */
+        .transition-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="transition-effect" id="transition-effect"></div>
+    
+    <div class="container">
+        <!-- Pantalla de Caos -->
+        <div id="chaos-screen">
+            <div class="chaos-header">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                    <span>Sistema Universitario</span>
+                </div>
+                <div class="header-buttons">
+                    <button class="fake-btn"><i class="fas fa-question-circle"></i> Ayuda</button>
+                    <button class="fake-btn"><i class="fas fa-cog"></i> Configuración</button>
+                    <button class="fake-btn"><i class="fas fa-sign-out-alt"></i> Salir</button>
+                </div>
+            </div>
+            
+            <div class="captcha-container">
+                <div class="captcha-title">
+                    <i class="fas fa-robot"></i>
+                    <span>Verificación Anti-Bots (¿o pro-bots?)</span>
+                </div>
+                <div class="captcha-box">
+                    <input type="text" id="captcha-input" placeholder="Ingrese la palabra mágica">
+                    <button id="captcha-validate">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Validar</span>
+                    </button>
+                </div>
+                <div class="captcha-hint">
+                    <button id="captcha-hint">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>¿Necesitas una pista?</span>
+                    </button>
+                    <div id="captcha-msg"></div>
+                </div>
+            </div>
+            
+            <div class="chaos-actions">
+                <button id="chaos-next" class="fake-action">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>Siguiente</span>
+                </button>
+                <button id="chaos-random" class="fake-action">
+                    <i class="fas fa-random"></i>
+                    <span>Aleatorio</span>
+                </button>
+                <button id="chaos-bork" class="fake-action">
+                    <i class="fas fa-paw"></i>
+                    <span>Bork</span>
+                </button>
+            </div>
+            
+            <div class="meme-container">
+                <div class="meme-title">¿Todo fallando? Prueba suerte con el meme:</div>
+                <img id="meme1" src="slides/meme1.jpg" alt="Meme académico">
+            </div>
+            
+            <div id="thief">
+                <i class="fas fa-running"></i>
+            </div>
+        </div>
+        
+       <!-- Pantalla de Presentación -->
+<div id="presentation-screen">
+  <div class="presentation-header">
+    <div class="presentation-title">Presentación Formal</div>
+  </div>
+  
+  <div class="slide-container">
+    <!-- Slide falso sorpresa -->
+    <div class="slide fake" data-index="-1">
+      <img src="slides/explosion-12389.gif" alt="Susto">
+    </div>
+
+    <!-- Slides reales -->
+    <div class="slide active" data-index="0"><img src="slides/0001.jpg" alt="Slide 1"></div>
+    <div class="slide" data-index="1"><img src="slides/0002.jpg" alt="Slide 2"></div>
+    <div class="slide" data-index="2"><img src="slides/0003.jpg" alt="Slide 3"></div>
+    <div class="slide" data-index="3"><img src="slides/0004.jpg" alt="Slide 4"></div>
+    <div class="slide" data-index="4"><img src="slides/0005.jpg" alt="Slide 5"></div>
+    <div class="slide" data-index="5"><img src="slides/0006.jpg" alt="Slide 6"></div>
+    <div class="slide" data-index="6"><img src="slides/0007.jpg" alt="Slide 7"></div>
+    <div class="slide" data-index="7"><img src="slides/0008.jpg" alt="Slide 8"></div>
+    <div class="slide" data-index="8"><img src="slides/0009.jpg" alt="Slide 9"></div>
+    <div class="slide" data-index="9"><img src="slides/0010.jpg" alt="Slide 10"></div>
+    <div class="slide" data-index="10"><img src="slides/0011.jpg" alt="Slide 11"></div>
+    <div class="slide" data-index="11"><img src="slides/0012.jpg" alt="Slide 12"></div>
+    
+    <!-- Controles -->
+    <div class="presentation-controls">
+      <button id="prev" class="nav-btn">
+        <i class="fas fa-chevron-left"></i>
+        <span>Anterior</span>
+      </button>
+      
+      <div class="progress-container">
+        <div class="progress-bar"><div id="fill"></div></div>
+        <div class="slide-counter">Slide <span id="idx">1</span>/12</div>
+      </div>
+      
+      <button id="next" class="nav-btn">
+        <span>Siguiente</span>
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      
+      <button id="exit" class="nav-btn">
+        <i class="fas fa-times"></i>
+        <span>Salir</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const slides = document.querySelectorAll(".slide:not(.fake)"); // solo los reales
+const fakeSlide = document.querySelector(".slide.fake");
+const idxSpan = document.getElementById("idx");
+const fill = document.getElementById("fill");
+let current = 0;
+
+// Actualizar barra y contador
+function updateUI() {
+  idxSpan.textContent = current + 1;
+  fill.style.width = ((current + 1) / slides.length) * 100 + "%";
+}
+
+// Mostrar un slide real
+function showSlide(index) {
+  document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
+  slides[index].classList.add("active");
+  current = index;
+  updateUI();
+}
+
+// Evento botón siguiente
+document.getElementById("next").addEventListener("click", () => {
+  // chance de susto sorpresa (10%)
+  if (Math.random() < 0.1) {
+    document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
+    fakeSlide.classList.add("active");
+    setTimeout(() => showSlide(current), 1200); // regresa rápido al actual
+    return;
+  }
+
+  if (current < slides.length - 1) {
+    showSlide(current + 1);
+  }
+});
+
+// Evento botón anterior
+document.getElementById("prev").addEventListener("click", () => {
+  if (current > 0) {
+    showSlide(current - 1);
+  }
+});
+
+// Iniciar presentación
+showSlide(0);
+</script>
+
+<style>
+/* Slides */
+.slide { 
+  display: none; 
+  width: 100%;
+  height: 100%;
+}
+.slide.active { 
+  display: block; 
+}
+.slide img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain;
+}
+
+/* Slide falso (susto) */
+.slide.fake img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.slide.fake.active {
+  background: black;
+  animation: flash 0.15s alternate 8;
+}
+@keyframes flash {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Barra de progreso */
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progress-bar {
+  width: 150px;
+  height: 6px;
+  background: #444;
+  border-radius: 4px;
+  overflow: hidden;
+}
+#fill {
+  height: 100%;
+  width: 0;
+  background: #2b8cff;
+  transition: width 0.3s;
+}
+.slide-counter {
+  color: white;
+  font-size: 14px;
+}
+
+/* Botones */
+.presentation-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+.nav-btn {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+.nav-btn:hover {
+  background: #444;
+}
+</style>
+
+
+    <script>
+        // El mismo código JavaScript anterior pero con mejoras para la nueva interfaz
+        (function(){
+            // ELEMENTOS
+            const chaosScreen = document.getElementById('chaos-screen');
+            const presentationScreen = document.getElementById('presentation-screen');
+            const transitionEffect = document.getElementById('transition-effect');
+
+            // CAOS controls
+            const captchaInput = document.getElementById('captcha-input');
+            const captchaValidate = document.getElementById('captcha-validate');
+            const captchaHint = document.getElementById('captcha-hint');
+            const captchaMsg = document.getElementById('captcha-msg');
+            const chaosNext = document.getElementById('chaos-next');
+            const chaosRandom = document.getElementById('chaos-random');
+            const chaosBork = document.getElementById('chaos-bork');
+            const thief = document.getElementById('thief');
+            const meme1 = document.getElementById('meme1');
+
+            // PRESENTACIÓN controls
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevBtn = document.getElementById('prev');
+            const nextBtn = document.getElementById('next');
+            const exitBtn = document.getElementById('exit');
+            const idx = document.getElementById('idx');
+            const fill = document.getElementById('fill');
+
+            let attempts = 0;
+            let stolen = false;
+            let formal = false;
+            let current = 0;
+
+            // UTIL: random int
+            const rnd = (n) => Math.floor(Math.random()*n);
+
+            /* ----------------- BEHAVIOUR: CAOS ----------------- */
+
+            // Hacer que los botones falsos fallen a menudo
+            function fakeFail(btn){
+                btn.addEventListener('click', () => {
+                    const r = Math.random();
+                    if(r < 0.55){
+                        // no hace nada: blink
+                        blink(btn, 3);
+                        maybeShowTurkish();
+                    } else if(r < 0.8){
+                        // roba el button (se mueve fuera)
+                        stealButton(btn);
+                    } else {
+                        // hace un popup gracioso
+                        randomPopup();
+                    }
+                });
+            }
+
+            fakeFail(chaosNext); fakeFail(chaosRandom); fakeFail(chaosBork);
+
+            // Cuando el meme se clicka, a veces inicia la transición por accidente
+            meme1 && meme1.addEventListener('click', () => {
+                if(Math.random() < 0.3) {
+                    toast('Este meme no es oficial. Iniciando orden...');
+                    setTimeout(transitionToFormal, 700);
+                } else {
+                    toast('Meme bloqueado por derechos imaginarios 🤷‍♂️');
+                }
+            });
+
+            // blink visual
+            function blink(el, times=2){
+                let i = 0;
+                const orig = el.style.transform || '';
+                const id = setInterval(()=> {
+                    el.style.transform = (i%2===0) ? 'translateX(6px) rotate(-2deg)' : 'translateX(0)';
+                    i++;
+                    if(i>times*2){ clearInterval(id); el.style.transform = orig; }
+                }, 140);
+            }
+
+            // Robar botón: lo quita del DOM y muestra el ladrón; para recuperarlo necesitas pasar un mini puzzle (clic varias veces)
+            function stealButton(btn){
+                if(stolen) { toast('El botón ya fue robado.'); return; }
+                stolen = true;
+                const rect = btn.getBoundingClientRect();
+                // anim: hide button then show thief
+                btn.style.transition = 'transform 300ms, opacity 300ms';
+                btn.style.opacity = 0; btn.style.transform = 'scale(.3) translateY(-20px)';
+                setTimeout(()=>{ btn.style.display = 'none'; showThief(rect); }, 320);
+            }
+
+            function showThief(fromRect){
+                thief.style.display = 'flex';
+                thief.style.opacity = 0;
+                thief.style.transform = 'translateY(-10px)';
+                thief.style.right = '24px';
+                thief.style.top = (fromRect.top - 20) + 'px';
+                setTimeout(()=>{ thief.style.opacity = 1; thief.style.transform = 'translateY(0)'; }, 50);
+
+                // thief se mueve por pantalla cada pocos segundos
+                let hx = 0;
+                const moveInterval = setInterval(()=>{
+                    const x = 10 + rnd(80);
+                    const y = 60 + rnd(70);
+                    thief.style.right = x + 'px';
+                    thief.style.top = y + 'px';
+                    hx++;
+                    if(hx>20 || !stolen) { clearInterval(moveInterval); }
+                }, 800);
+
+                // Para recuperar el botón: click repetido (mini puzzle)
+                let clicks = 0;
+                thief.onclick = () => {
+                    clicks++;
+                    if(clicks < 4){
+                        toast('¡Casi! '+'(clics: '+clicks+'/4)');
+                    } else {
+                        // devuelve el botón: lo buscamos en chaos screen (restaurar)
+                        restoreButton();
+                        stolen = false;
+                        thief.style.opacity = 0;
+                        setTimeout(()=>{ thief.style.display = 'none'; }, 300);
+                    }
+                };
+            }
+
+            // Restaurar button: buscar el primer fake-action oculto y mostrarlo
+            function restoreButton(){
+                const hidden = Array.from(document.querySelectorAll('.fake-action')).find(b => b.style.display === 'none' || b.style.opacity === '0');
+                const target = hidden || document.querySelector('.fake-action');
+                if(!target) return;
+                target.style.display = 'flex';
+                setTimeout(()=>{ target.style.opacity = 1; target.style.transform = 'scale(1)'; }, 60);
+                toast('Botón recuperado. No lo pierdas otra vez.');
+            }
+
+            // Popups tontos (ej: turco)
+            function randomPopup(){
+                const msgs = [
+                    'Error 404: Educación no encontrada.',
+                    'Duyuru: Sistem güncellemesi yapılıyor. (Este es turco falso)',
+                    'Atención: su botón fue delegado a otra ventanilla.',
+                    'Advertencia: vuelva a intentarlo mañana (o en 2030).'
+                ];
+                const m = msgs[rnd(msgs.length)];
+                
+                // Crear un modal moderno en lugar de un alert
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                `;
+                
+                const modalContent = document.createElement('div');
+                modalContent.style.cssText = `
+                    background: white;
+                    padding: 30px;
+                    border-radius: 16px;
+                    max-width: 400px;
+                    text-align: center;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                `;
+                
+                modalContent.innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #2d3748;">¡Atención!</h3>
+                    <p style="margin-bottom: 20px; color: #4a5568;">${m}</p>
+                    <button style="padding: 12px 24px; background: #4a6cf7; color: white; border: none; border-radius: 8px; cursor: pointer;">Aceptar</button>
+                `;
+                
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+                
+                modal.querySelector('button').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                });
+            }
+
+            function maybeShowTurkish(){
+                if(Math.random() < 0.25){
+                    // mostrar mensaje turco pequeño (toast)
+                    toast('Duyuru: lütfen sabırlı olun. (Mensaje en turco)');
+                }
+            }
+
+            // toast simple
+            function toast(msg){
+                const d = document.createElement('div');
+                d.textContent = msg;
+                Object.assign(d.style,{
+                    position:'fixed',
+                    left:'50%',
+                    transform:'translateX(-50%)',
+                    bottom:'30px',
+                    background:'#2d3748',
+                    color:'#fff',
+                    padding:'14px 22px',
+                    borderRadius:'12px',
+                    zIndex:99999,
+                    opacity:0.97,
+                    boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+                    fontWeight: '500'
+                });
+                document.body.appendChild(d);
+                setTimeout(()=>d.remove(), 2400);
+            }
+
+            // pistas del captcha
+            captchaHint.addEventListener('click', ()=> {
+                // Pista que aparece y luego se esfuma
+                captchaMsg.textContent = 'Pista: comienza con S y es un framework ágil (¡pero es una palabra!).';
+                setTimeout(()=> captchaMsg.textContent = '', 3400);
+            });
+
+            // CAPTCHA: validación con troll: se puede ocultar el botón, cambiar posicion, fallar a propósito.
+            captchaValidate.addEventListener('click', () => {
+                attempts++;
+                const val = (captchaInput.value||'').trim();
+                // 1) a veces el botón se mueve (se esconde)
+                if(Math.random() < 0.25){
+                    // hide button for a bit
+                    captchaValidate.style.transform = 'translateX(-160%)';
+                    captchaMsg.textContent = 'Procesando...';
+                    setTimeout(()=> {
+                        captchaValidate.style.transform = '';
+                        captchaMsg.textContent = '';
+                    }, 900 + rnd(1200));
+                    return;
+                }
+
+                // 2) si el texto es correcto, aun así puede fallar hasta varios intentos
+                if(val.toLowerCase() === 'scrum'){
+                    // success probability grows with attempts
+                    const baseFailChance = Math.max(0, 0.45 - attempts*0.08); // con cada intento baja la falla
+                    if(Math.random() < baseFailChance){
+                        captchaMsg.textContent = 'Validación fallida por razones administrativas. (Intenta otra vez)';
+                        // a veces roba el botón cuando falla
+                        if(Math.random() < 0.28) stealButton(captchaValidate);
+                        return;
+                    }
+                    // si pasa, transición (pero no siempre inmediata)
+                    captchaMsg.textContent = 'Validación aceptada. Preparando orden...';
+                    setTimeout(()=> transitionToFormal(), 700);
+                } else {
+                    captchaMsg.textContent = 'Incorrecto. Inténtalo de nuevo (la vida universitaria es así).';
+                    // en intentos altos, mostrar turco o popup
+                    if(attempts > 2 && Math.random() < 0.4) randomPopup();
+                }
+            });
+
+            /* ----------------- TRANSICIÓN ----------------- */
+            function transitionToFormal(){
+                if(formal) return;
+                formal = true;
+                
+                // Efecto de transición con el div blanco
+                transitionEffect.style.opacity = '1';
+                setTimeout(() => {
+                    chaosScreen.style.display = 'none';
+                    presentationScreen.style.display = 'flex';
+                    transitionEffect.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        presentationScreen.style.opacity = 1;
+                        showSlide(0);
+                    }, 500);
+                }, 600);
+            }
+
+            /* ----------------- PRESENTATION: navegación limpia, con toques de caos menor ----------------- */
+
+            function showSlide(i){
+                slides.forEach(s => s.classList.remove('active'));
+                current = Math.max(0, Math.min(slides.length - 1, i));
+                slides[current].classList.add('active');
+                idx.textContent = (current + 1);
+                const pct = Math.round((current / (slides.length - 1)) * 100);
+                fill.style.width = pct + '%';
+            }
+
+            nextBtn && nextBtn.addEventListener('click', ()=> {
+                // pequeño toque: 12% chance de glitch (random slide) para mantener humor
+                if(Math.random() < 0.12){
+                    toast('Pequeño desajuste detectado. Saltando a otra diapositiva...');
+                    showSlide(rnd(slides.length));
+                    return;
+                }
+                showSlide(current + 1);
+            });
+
+            prevBtn && prevBtn.addEventListener('click', ()=> {
+                if(Math.random() < 0.08){
+                    randomPopup();
+                    return;
+                }
+                showSlide(current - 1);
+            });
+
+            // Exit (volver al caos) — con confirmación absurda
+            exitBtn && exitBtn.addEventListener('click', ()=> {
+                // Modal personalizado para confirmación
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                `;
+                
+                const modalContent = document.createElement('div');
+                modalContent.style.cssText = `
+                    background: white;
+                    padding: 30px;
+                    border-radius: 16px;
+                    max-width: 400px;
+                    text-align: center;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                `;
+                
+                modalContent.innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #2d3748;">¿Volver al caos?</h3>
+                    <p style="margin-bottom: 20px; color: #4a5568;">¿Seguro que quieres volver al caos? Podrías arrepentirte.</p>
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button id="modal-cancel" style="padding: 12px 24px; background: #f8f9fa; color: #4a5568; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer;">Cancelar</button>
+                        <button id="modal-confirm" style="padding: 12px 24px; background: #e53e3e; color: white; border: none; border-radius: 8px; cursor: pointer;">Sí, al caos</button>
+                    </div>
+                `;
+                
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+                
+                document.getElementById('modal-cancel').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                });
+                
+                document.getElementById('modal-confirm').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                    // reset estados
+                    formal = false;
+                    attempts = 0;
+                    stolen = false;
+                    captchaInput.value = '';
+                    captchaMsg.textContent = '';
+                    
+                    // Efecto de transición
+                    transitionEffect.style.opacity = '1';
+                    setTimeout(() => {
+                        presentationScreen.style.display = 'none';
+                        chaosScreen.style.display = 'block';
+                        transitionEffect.style.opacity = '0';
+                        thief.style.display = 'none';
+                        showSlide(0);
+                    }, 600);
+                });
+            });
+
+            /* ----------------- Inicialización ----------------- */
+            window.addEventListener('load', ()=>{
+                // start with chaos visible
+                presentationScreen.style.display = 'none';
+                // occasionally suggest clicking meme
+                setTimeout(()=> toast('Consejo: si todo falla, intenta hacer clic en el meme.'), 1500);
+            });
+
+            // add fakeFail behavior to header fake buttons to be extra molesto
+            Array.from(document.querySelectorAll('.fake-btn')).forEach(b=>{
+                b.addEventListener('click', ()=>{
+                    if(Math.random() < 0.6){
+                        blink(b, 4);
+                        toast('Botón temporalmente fuera de servicio. Por favor, rezo recomendado.');
+                    } else {
+                        randomPopup();
+                    }
+                });
+            });
+
+        })();
+    </script>
+</body>
+</html>
